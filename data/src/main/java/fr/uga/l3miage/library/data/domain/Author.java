@@ -4,11 +4,24 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "Author")
 
 public class Author {
-
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(name= "fullName")
     private String fullName;
+   
+    @ManyToMany
     private Set<Book> books;
 
     public Long getId() {

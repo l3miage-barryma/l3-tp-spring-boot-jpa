@@ -1,9 +1,15 @@
 package fr.uga.l3miage.library.data.domain;
 
 import java.util.Objects;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
+
+@Entity
+@Table(name = "Librarian ")
 public class Librarian extends Person {
-
+   @OneToOne
     private Librarian manager;
 
     public Librarian getManager() {

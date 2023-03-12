@@ -1,5 +1,6 @@
 package fr.uga.l3miage.library.data.repo;
 
+import fr.uga.l3miage.library.data.domain.Author;
 import fr.uga.l3miage.library.data.domain.Book;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class BookRepository implements CRUDRepository<Long, Book> {
      */
     public List<Book> all() {
         // TODO créer les named query
+       // String req = "select a from Author a where a.fullName := fullName order by a.fullName ASC" ;
+
         return entityManager.createNamedQuery("all-books", Book.class).getResultList();
     }
 
@@ -50,10 +53,13 @@ public class BookRepository implements CRUDRepository<Long, Book> {
      */
     public List<Book> findByContainingTitle(String titlePart) {
         // TODO créer les named query
+
+       // String rqery = "SELECT a FROM Book b WHERE LOWER(a.title) LIKE :titlePart " ;
+
         return entityManager.createNamedQuery("find-books-by-title", Book.class)
-                // TODO completer l'appel pour utiliser le paramètre de cette méthode
-                .getResultList();
-    }
+        // TODO completer l'appel pour utiliser le paramètre de cette méthode
+        .setParameter("titlePart", "%" + titlePart.toLowerCase() + "%") .getResultList();
+}
 
     /**
      * Trouve les livres d'un auteur donnée dont le titre contient la chaine passée (non sensible à la casse)
@@ -63,9 +69,13 @@ public class BookRepository implements CRUDRepository<Long, Book> {
      */
     public List<Book> findByAuthorIdAndContainingTitle(Long authorId, String titlePart) {
         // TODO créer les named query
-        return entityManager.createNamedQuery("find-books-by-author-and-title", Book.class)
                 // TODO completer l'appel pour utiliser les paramètres de cette méthode
-                .getResultList();
+                String title ='%' + titlePart.toLowerCase() +'%';
+               return entityManager.createNamedQuery("find-books-by-author-and-title", Book.class)
+               .setParameter("id",authorId)
+               .setParameter("titlePart",title).getResultList();
+                
+               
     }
 
     /**
@@ -75,9 +85,11 @@ public class BookRepository implements CRUDRepository<Long, Book> {
      */
     public List<Book> findBooksByAuthorContainingName(String namePart) {
         // TODO créer les named query
+        String name ='%' + namePart.toLowerCase() +'%';
         return entityManager.createNamedQuery("find-books-by-authors-name", Book.class)
                 // TODO completer l'appel pour utiliser le paramètre de cette méthode
-                .getResultList();
+                
+                .setParameter("namePart",name).getResultList();
     }
 
     /**
@@ -89,7 +101,7 @@ public class BookRepository implements CRUDRepository<Long, Book> {
         // TODO créer les named query
         return entityManager.createNamedQuery("find-books-by-several-authors", Book.class)
                 // TODO completer l'appel pour utiliser le paramètre de cette méthode
-                .getResultList();
+                .setParameter(1,count).getResultList();
     }
 
 }

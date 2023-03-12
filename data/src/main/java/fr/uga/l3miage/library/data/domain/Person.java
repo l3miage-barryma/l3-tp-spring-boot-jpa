@@ -3,11 +3,29 @@ package fr.uga.l3miage.library.data.domain;
 import java.util.Date;
 import java.util.Objects;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
+
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@Entity
+@Table(name = "Person")
 public abstract class Person {
 
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     private Gender gender;
+    @Column(name= "firstName")
     private String firstName;
+    @Column(name= "lastName")
     private String lastName;
     private Date birth;
 

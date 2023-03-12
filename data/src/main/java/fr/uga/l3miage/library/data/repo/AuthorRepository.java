@@ -1,11 +1,15 @@
 package fr.uga.l3miage.library.data.repo;
 
 import fr.uga.l3miage.library.data.domain.Author;
+import fr.uga.l3miage.library.data.domain.Book;
+
 import jakarta.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 
 @Repository
 public class AuthorRepository implements CRUDRepository<Long, Author> {
@@ -42,7 +46,7 @@ public class AuthorRepository implements CRUDRepository<Long, Author> {
     @Override
     public List<Author> all() {
         // TODO
-        return null;
+        return entityManager.createQuery("FROM Author").getResultList();
     }
 
     /**
@@ -53,7 +57,8 @@ public class AuthorRepository implements CRUDRepository<Long, Author> {
      */
     public List<Author> searchByName(String namePart) {
         // TODO
-        return null;
+        return entityManager.createQuery("SELECT a FROM Author a WHERE LOWER(a.fullName) LIKE :namePart ORDER BY a.fullName", Author.class)
+        .setParameter("namePart", "%" + namePart.toLowerCase() + "%").getResultList();
     }
 
     /**
@@ -63,7 +68,15 @@ public class AuthorRepository implements CRUDRepository<Long, Author> {
      */
     public boolean checkAuthorByIdHavingCoAuthoredBooks(long authorId) {
         // TODO
-        return false;
-    }
+       
+            Author auteur = entityManager.find(Author.class,authorId);
+            for(Book book : auteur.getBooks()){
+                if(book.getAuthors().size()>1){
+                    return true;
+                }
+            }
+            return false;
+        }
+       
 
 }
