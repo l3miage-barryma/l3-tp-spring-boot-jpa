@@ -46,8 +46,8 @@ public class BorrowRepository implements CRUDRepository<String, Borrow> {
      */
     public List<Borrow> findInProgressByUser(String userId) {
         // TODO
-        return entityManager.createQuery("SELECT b FROM Borrow b join b.books  WHERE b.borrower =: id", Borrow.class)
-        .setParameter("id",userId).getResultList();
+        return entityManager.createQuery(" select b FROM Borrow b WHERE b.borrower =: ?1 AND requestedReturn IS NULL", Borrow.class)
+        .setParameter(1,userId).getResultList();
                 
     }
 
